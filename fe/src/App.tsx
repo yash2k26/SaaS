@@ -3,7 +3,7 @@ import LandingPage from "./context/pages/LandingPage"
 
 import Signup1 from "./components/Signup"
 import { UserProvider } from "./context/UserContext/usercontext"
-import Pricing from "./context/pages/Pricing"
+import Pricing from "./components/pricing"
 
 const App = () => {
   return (
@@ -11,7 +11,7 @@ const App = () => {
         <UserProvider>
           <Routes>
               <Route path="/landing" element={<LandingPage/>} />
-              {/* <Route path="/pricing" element={<Pricing/>} /> */}
+              <Route path="/pricing" element={<Pricing/>} />
           </Routes>
         </UserProvider>
       </BrowserRouter>

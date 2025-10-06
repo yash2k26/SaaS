@@ -8,9 +8,10 @@ import ThreeCards from '../../components/ThreeCards'
 import Signup1 from '../../components/Signup'
 import Login1 from '../../components/Login'
 import { useUser } from '../UserContext/usercontext'
+import Pricing from '../../components/pricing'
 
 function LandingPage() {
-  const { form , dir} = useUser()
+  const { form  } = useUser()
   return (
     <div>
       <div className=' bg-gradient-to-b from-[#1e1b4b] from-35% via-[#312e81] to-[#ddd6fe] min-h-screen '>
@@ -35,7 +36,7 @@ function LandingPage() {
       </div>
         {form === "signup" && <Signup1 /> }
         {form === "login" && <Login1 /> }
-       
+        {form === "pricing" && <Pricing/>}
     </div>
   )
 }

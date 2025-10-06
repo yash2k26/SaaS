@@ -1,6 +1,6 @@
 import  {  createContext, useContext, useState, type ReactNode } from 'react'
 
-type FormType = "login" | "signup" | null
+type FormType = "login" | "signup" | "pricing" | null
 
 interface UserContextType {
     user : boolean,
@@ -12,14 +12,15 @@ interface UserContextType {
     password : string,
     setpassword : (value : string)=>void,
     setdir:(value:boolean)=>void,
-    dir:boolean 
+    dir:boolean ,
+    
 }
 
 
 const UserContext = createContext<UserContextType | undefined>(undefined)
 
 export const UserProvider = ({children}:{children:ReactNode}) => {
-    const [user , setuser] = useState<boolean>(true)
+    const [user , setuser] = useState<boolean>(false)
     const [email , setemail] = useState<string>("")
     const [password , setpassword] = useState<string>("")
     const [form , setform ]= useState<FormType>(null)
