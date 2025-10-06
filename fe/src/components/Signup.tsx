@@ -5,8 +5,8 @@ import { useUser } from '../context/UserContext/usercontext'
 function Signup1() {
   const {setform } = useUser()
   return (
-    <div className='backdrop-blur-sm z-50  flex fixed inset-0 justify-center items-center w-auto h-screen '>
-      <div className=' rounded-2xl w-[310px] bg-indigo-50 h-[400px] text-center mt-16 '>
+    <div onClick={()=>setform(null)} className='backdrop-blur-sm z-50  flex fixed inset-0 justify-center items-center w-auto h-screen '>
+      <div onClick={(e)=>e.stopPropagation()} className=' rounded-2xl w-[310px] bg-indigo-50 h-[400px] text-center mt-16 '>
         <div className='flex'>
             <button className='cursor-pointer  relative left-72 bottom-6 text-xl font-bold ' onClick={()=>setform(null)}>X</button>
             <h1 className='text-4xl p-3 relative left-20 text-black font-serif mt-7 '>Sign up</h1>
