@@ -16,13 +16,13 @@ function Navbar() {
 
   return (
     <div>
-      <nav className='flex justify-between  items-center py-4 h-auto w-full px-20 '>
+      <nav className='flex justify-between  items-center py-4 h-auto w-full px-24 '>
         <div className='flex space-x-2 my-auto '>
           <img className="size-10 " src="src\assets\Untitled_design-removebg-preview.png" alt="" />
           <h1 className="text-white font-semibold text-xl tracking-widest  ">IMAGIFY</h1>
         </div>
         {
-          user ?
+          !user ?
             <div className='flex space-x-3 justify-center'>
               <div>
                 <button
