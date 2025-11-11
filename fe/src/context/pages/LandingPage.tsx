@@ -8,32 +8,58 @@ import ThreeCards from '../../components/ThreeCards'
 import Signup1 from '../../components/Signup'
 import Login1 from '../../components/Login'
 import { useUser } from '../UserContext/usercontext'
-import Pricing from '../../components/pricing'
+import Imagecap from '../../components/imagecap'
+import Pricing from '../../components/Pricing'
+import { ToastContainer } from 'react-toastify';
+import {  motion, useMotionTemplate, useMotionValue } from "motion/react"
+import { useEffect } from 'react'
+import { animate } from 'motion'
+import { Stars } from '@react-three/drei'
+import { Canvas } from '@react-three/fiber'
+import FloatingImages from '../../components/FloatingImages'
+
+const COLORS = [ "#2d1b69", "#5b2d82", "#7e3acb"];
 
 function LandingPage() {
   const { form  } = useUser()
+  const color = useMotionValue(COLORS[0])
+  
+  const backgroundImage = useMotionTemplate`radial-gradient(150% 150% at 50% 0%, #01010f 30%, ${color}) `
+  const boxShadow = useMotionTemplate`0px 4px 24px ${color} `
+  const border = useMotionTemplate`1px solid${color}`
+  useEffect(()=>{
+    animate(color,COLORS,{
+      ease:"easeInOut",
+      duration:10,
+      repeat: Infinity,
+      repeatType:"mirror"
+    })
+  },[])
+  
   return (
-    <div>
-      <div className=' bg-gradient-to-b from-[#1e1b4b] from-35% via-[#312e81] to-[#ddd6fe] min-h-screen '>
+    <div className=''>
+
+      <motion.div 
+      style={{
+        backgroundImage
+      }}
+      className='relative h-screen z-10  '>
+        <ToastContainer position='top-center'/>
+        
+        <div className='absolute inset-0 -z-10 pointer-events-none min-h-screen'>
+          <Canvas>
+            <Stars radius={50} count={1000} factor={4} fade speed={2} />
+          </Canvas>
+        </div>
         <Navbar/>
         <Badge/>
         <Maintxt/>
+        <FloatingImages/>
         <Subtxt/>
-        <Bttn/>
-        <Images/>
-        <div className="flex text-center font-mono mt-3.5 justify-center items-center ">
-          <h4 className="text-white">Generating images from imagify....</h4>
-        </div>
-        <div className='flex justify-center items-center mt-28  '>
-          <h2 className='text-6xl text-center font-semibold text-white '>
-            How it works
-            <h4 className='text-indigo-100 text-sm mt-4  '>
-              Transform Words Into Stunning Images
-            </h4>
-          </h2>
-        </div>
-        <ThreeCards/>
-      </div>
+        <Bttn boxShadow={boxShadow} border={border} />
+        
+      </motion.div >
+      
         {form === "signup" && <Signup1 /> }
         {form === "login" && <Login1 /> }
         {form === "pricing" && <Pricing/>}

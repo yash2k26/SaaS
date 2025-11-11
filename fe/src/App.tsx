@@ -3,7 +3,9 @@ import LandingPage from "./context/pages/LandingPage"
 
 import Signup1 from "./components/Signup"
 import { UserProvider } from "./context/UserContext/usercontext"
-import Pricing from "./components/pricing"
+import Pricing from "./components/Pricing"
+import ImageGen from "./context/pages/ImageGen"
+
 
 const App = () => {
   return (
@@ -11,7 +13,7 @@ const App = () => {
         <UserProvider>
           <Routes>
               <Route path="/landing" element={<LandingPage/>} />
-              <Route path="/pricing" element={<Pricing/>} />
+              <Route path="/Imagegen" element={<ImageGen/>} />
           </Routes>
         </UserProvider>
       </BrowserRouter>
