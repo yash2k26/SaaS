@@ -18,32 +18,42 @@ const COLORS = [ "#2d1b69", "#5b2d82", "#7e3acb"];
 
 const ImageGen = () => {
 
-  const { generateImage } = useUser()
+  const { generateImage,credit,setcredit } = useUser()
   const [prompt , setprompt ] = useState<string>("")
-  const [messages , setmessages] = useState<string[]>([])
+  const [messages , setmessages] = useState<data[]>([])
   const [loading , setloading] = useState<boolean | null>(null)
   const [ImageUrl , setImageUrl] = useState<string | null>("")
 
+  type data = {
+    type: string,
+    content: string
+
+  }
+
   const handleSend = async () =>{
       if(!prompt) return
-
-      setmessages((prev)=>[...prev,prompt])
+ 
+      setmessages((prev)=>[...prev,{type : "prompt" , content : prompt   }])
       setprompt("")
       setloading(true)
       
       try {
-        const url = await generateImage(prompt)
+        const result = await generateImage(prompt)
+        if(!result) return
 
-        console.log("Image url : ",url)
-        
-        if(url){
-          setImageUrl(url)
+        const {resultImage , creditBal } = result
+
+        console.log(resultImage)
+        console.log(creditBal)
+
+        if(resultImage){
+          setcredit(creditBal)
+          setmessages((prev)=>[...prev,{type : "image" , content : resultImage   }])
         }else{
           toast.error("Failed to generate an image")
         }
-
       } catch (error) {
-            console.error("something went wrong")
+          console.error("something went wrong")
       }finally{
         setloading(false)
       }
@@ -60,49 +70,57 @@ const ImageGen = () => {
         </Canvas>
       </div>
 
-      <nav className=' p-4 z-0 items-center bg-black backdrop-blur-2xl flex border-gray-900 '>
+      <nav className=' p-4 z-0 items-center justify-between bg-black backdrop-blur-2xl flex border-gray-900 '>
+        <div className='flex'>
         <img className="size-10 " src="src\assets\Untitled_design-removebg-preview.png" alt="" />
         <h1 className='text-white font-semibold text-xl tracking-widest'>IMAGIFY</h1>
+        </div>
+        <div>
+          <button
+              className='bg-transparent shadow-inner shadow-indigo-200 cursor-pointer p-1 font-semibold px-6  text-white text-center rounded-2xl '>
+                Credits Left : {credit} 
+          </button>
+        </div>
       </nav>
 
       {
-        <div className='absolute bottom-[90px] [&::-webkit-scrollbar]:hidden scroll-smooth top-[75px] right-[250px] inset-x-0 overflow-y-auto flex flex-col items-center  gap-3 z-0 '>
-          {messages.map((msg,i)=>(
-            <motion.div
-            key={i}
-            initial={{opacity:0 , y:80}}
-            animate = {{opacity:1 , y:0}}
-            transition={{duration:0.5}}
-            className='bg-white/20 text-white break-words whitespace-pre-wrap self-end px-4 py-6 max-w-[75%] rounded-2xl text-left '
-            >
-              {msg}
-            </motion.div>
+        <div className='absolute bottom-[90px] [&::-webkit-scrollbar]:hidden scroll-smooth top-[75px] right-[290px] inset-x-0 overflow-y-auto flex flex-col items-center  gap-3 z-0 '>
+          {messages.map((msg)=>(
+            msg.type == "prompt" ? 
+              <motion.div
+              initial={{opacity:0 , y:80}}
+              animate = {{opacity:1 , y:0}}
+              transition={{duration:0.5}}
+              className='bg-white/20 text-white break-words whitespace-pre-wrap self-end px-4 py-6 max-w-[75%] rounded-2xl text-left '
+              >
+                {msg.content}
+              </motion.div> :
+              (
+                <motion.img
+                  src={msg.content}
+                  initial={{opacity:0}}
+                  animate={{opacity:1}}
+                  transition={{duration:0.5}}
+                  className='rounded-2xl w-44 mr-56'
+                />
+              )
           ))}
         </div>
       }
 
       { loading &&
-        <motion.div
-          initial={{opacity:0}}
-          animate={{opacity:1}}
-          className='w-96 h-96 mt-4'
-        >
-            <img src="src\assets\Loading animation blue.gif" alt="Loading" className='w-16 h-16 animate-pulse' />
-        </motion.div>
-      }
-
-      {
-        ImageUrl &&
-
-        <motion.img
-          src={ImageUrl}
-          initial={{opacity:0}}
-          animate={{opacity:1}}
-          transition={{duration:0.5}}
-          className='rounded-2xl max-w-[55%] '
-        />
+      <div className='bottom-[90px] [&::-webkit-scrollbar]:hidden scroll-smooth top-[75px] right-[250px] inset-x-0 overflow-y-auto flex flex-col items-center  gap-3 z-0 '>
+          <motion.div
+            initial={{opacity:0}}
+            animate={{opacity:1}}
+            className='w-40 mt-4'
+          >
+              <img src="src\assets\Loading animation blue.gif" alt="Loading" className='w-16 h-16 animate-pulse' />
+          </motion.div>
+      </div>
         
       }
+
       
       <div className='absolute bottom-10 inset-x-0 flex justify-center px-4'>
         <div className='flex items-center gap-2 w-full max-w-3xl bg-[#403C41]  rounded-xl px-4 py-3 focus:outline-none '>
@@ -116,7 +134,7 @@ const ImageGen = () => {
           //@ts-ignore
           onClick={handleSend}
           className='w-6 h-6 cursor-pointer transition  focus  ' 
-            src="src\assets\send (1).png" alt="" />
+          src="src\assets\send (1).png" alt="" />
         </div>
       </div>
 

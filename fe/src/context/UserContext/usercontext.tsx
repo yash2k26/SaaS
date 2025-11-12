@@ -71,12 +71,11 @@ export const UserProvider = ({children}:{children:ReactNode}) => {
             //@ts-ignore
             const {data} = await axios.post("http://localhost:3000/api/image-gen",{prompt},{headers:{Authorization:token}})
 
-            console.log
-
-
             if(data.success){
-                
-                return data.resultImage
+                return {
+                    resultImage : data.resultImage,
+                    creditBal : data.CreditsBalance
+                }
             }else{
                 toast.error(data.message)
                 
